@@ -23,6 +23,12 @@ if (socketExists) {
 
 const pool = mysql.createPool(poolConfig);
 
+<<<<<<< HEAD
+=======
+/**
+ * Ping function that logs a clear console error if MySQL fails to connect on startup
+ */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export async function ping() {
   try {
     const conn = await pool.getConnection();
@@ -36,6 +42,12 @@ export async function ping() {
   }
 }
 
+<<<<<<< HEAD
+=======
+/**
+ * Ensures schema, tables, and columns exist for TripSplit
+ */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export async function initDatabase() {
   try {
     // 1. Ensure database exists
@@ -144,7 +156,11 @@ export async function initDatabase() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `);
 
+<<<<<<< HEAD
     // Ensure multi-currency & conversion fee columns exist in expenses
+=======
+    // Ensure multi-currency columns exist in expenses
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     try {
       const [curCols] = await pool.query('SHOW COLUMNS FROM expenses LIKE "currency"');
       if (curCols.length === 0) {
@@ -153,10 +169,13 @@ export async function initDatabase() {
         await pool.query("ALTER TABLE expenses ADD COLUMN exchange_rate DECIMAL(10, 4) DEFAULT 1.0000");
         await pool.query("UPDATE expenses SET original_amount = amount WHERE original_amount IS NULL");
       }
+<<<<<<< HEAD
       const [feeCols] = await pool.query('SHOW COLUMNS FROM expenses LIKE "conversion_fee"');
       if (feeCols.length === 0) {
         await pool.query("ALTER TABLE expenses ADD COLUMN conversion_fee DECIMAL(10, 2) DEFAULT 0.00");
       }
+=======
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     } catch (e) {
       console.warn('Could not check multi-currency columns in expenses:', e.message);
     }

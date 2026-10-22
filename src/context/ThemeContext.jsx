@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+/* oxlint-disable react/only-export-components */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext();

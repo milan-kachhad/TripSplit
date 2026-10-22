@@ -8,6 +8,7 @@ export const register = async (req, res) => {
   try {
     const { name, username, email, password } = req.body;
 
+<<<<<<< HEAD
     const trimmedEmail = (email || '').trim().toLowerCase();
 
     if (!trimmedEmail || !password) {
@@ -49,6 +50,28 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: 'Username cannot contain spaces.' });
     }
 
+=======
+    const trimmedName = (name || username || '').trim();
+    const rawUsername = (username || '').trim();
+    const trimmedEmail = (email || '').trim().toLowerCase();
+
+    if (!trimmedName || !trimmedEmail || !password) {
+      return res.status(400).json({ message: 'Name, email, and password are required.' });
+    }
+
+    // Security: Check that username does not contain spaces
+    if (/\s/.test(username || '')) {
+      return res.status(400).json({ message: 'Username cannot contain spaces.' });
+    }
+
+    const finalUsername = rawUsername || trimmedName.toLowerCase().replace(/[^a-z0-9_.-]/g, '');
+
+    // Username validation: 3-30 chars, alphanumeric + underscores + dashes + dots, no spaces
+    if (finalUsername.length < 3 || finalUsername.length > 30) {
+      return res.status(400).json({ message: 'Username must be between 3 and 30 characters long.' });
+    }
+
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     const usernameRegex = /^[a-zA-Z0-9_.-]+$/;
     if (!usernameRegex.test(finalUsername)) {
       return res.status(400).json({
@@ -56,7 +79,15 @@ export const register = async (req, res) => {
       });
     }
 
+<<<<<<< HEAD
     const trimmedName = (name || finalUsername).trim();
+=======
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail) || trimmedEmail.length > 100) {
+      return res.status(400).json({ message: 'Please provide a valid email address.' });
+    }
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 
     // Password security: 6 to 128 characters
     if (typeof password !== 'string' || password.length < 6 || password.length > 128) {
@@ -73,13 +104,21 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: 'Email already registered.' });
     }
 
+<<<<<<< HEAD
     // Verify username uniqueness - auto-disambiguate with numeric suffix if already taken
+=======
+    // Verify username uniqueness
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     const [userMatches] = await pool.query(
       'SELECT id FROM users WHERE LOWER(username) = LOWER(?)',
       [finalUsername]
     );
     if (userMatches.length > 0) {
+<<<<<<< HEAD
       finalUsername = `${finalUsername}_${Math.floor(100 + Math.random() * 900)}`;
+=======
+      return res.status(400).json({ message: 'Username already exists.' });
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     }
 
     // Hash password

@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 
+=======
+-- ==============================================================
+-- TripSplit Database Schema DDL Script
+-- Target Database: MySQL (tripsplit_db)
+-- ==============================================================
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 
 -- 1. Create and select the database
 CREATE DATABASE IF NOT EXISTS tripsplit_db
@@ -15,9 +22,15 @@ DROP TABLE IF EXISTS trip_members;
 DROP TABLE IF EXISTS trips;
 DROP TABLE IF EXISTS users;
 
+<<<<<<< HEAD
 
 -- Table 1: users
 
+=======
+-- ==============================================================
+-- Table 1: users
+-- ==============================================================
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 CREATE TABLE users (
   id VARCHAR(100) PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -28,9 +41,15 @@ CREATE TABLE users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+<<<<<<< HEAD
 
 -- Table 2: trips
 
+=======
+-- ==============================================================
+-- Table 2: trips
+-- ==============================================================
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 CREATE TABLE trips (
   id VARCHAR(100) PRIMARY KEY,
   title VARCHAR(150) NOT NULL,
@@ -43,9 +62,15 @@ CREATE TABLE trips (
   CONSTRAINT fk_trips_created_by FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+<<<<<<< HEAD
 
 -- Table 3: trip_members
 
+=======
+-- ==============================================================
+-- Table 3: trip_members
+-- ==============================================================
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 CREATE TABLE trip_members (
   id VARCHAR(100) PRIMARY KEY,
   trip_id VARCHAR(100) NOT NULL,
@@ -59,9 +84,15 @@ CREATE TABLE trip_members (
   CONSTRAINT fk_trip_members_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+<<<<<<< HEAD
 
 -- Table 4: expenses
 
+=======
+-- ==============================================================
+-- Table 4: expenses
+-- ==============================================================
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 CREATE TABLE expenses (
   id VARCHAR(100) PRIMARY KEY,
   trip_id VARCHAR(100) NOT NULL,
@@ -72,7 +103,10 @@ CREATE TABLE expenses (
   currency VARCHAR(3) DEFAULT 'INR',
   original_amount DECIMAL(10, 2),
   exchange_rate DECIMAL(10, 4) DEFAULT 1.0000,
+<<<<<<< HEAD
   conversion_fee DECIMAL(10, 2) DEFAULT 0.00,
+=======
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
   split_members TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   INDEX idx_expenses_trip (trip_id),
@@ -81,9 +115,15 @@ CREATE TABLE expenses (
   CONSTRAINT fk_expenses_paid_by FOREIGN KEY (paid_by) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+<<<<<<< HEAD
 
 -- Table 5: expense_splits
 
+=======
+-- ==============================================================
+-- Table 5: expense_splits
+-- ==============================================================
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 CREATE TABLE expense_splits (
   id VARCHAR(100) PRIMARY KEY,
   expense_id VARCHAR(100) NOT NULL,
@@ -95,8 +135,14 @@ CREATE TABLE expense_splits (
   CONSTRAINT fk_expense_splits_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+<<<<<<< HEAD
 -- Table 6: settlements
 
+=======
+-- ==============================================================
+-- Table 6: settlements
+-- ==============================================================
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 CREATE TABLE IF NOT EXISTS settlements (
   id VARCHAR(100) PRIMARY KEY,
   trip_id VARCHAR(100) NOT NULL,

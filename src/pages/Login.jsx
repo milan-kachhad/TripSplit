@@ -62,7 +62,11 @@ export default function Login() {
               autoComplete="username"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
+<<<<<<< HEAD
               placeholder="e.g. sarthak or sarthak@example.com"
+=======
+              placeholder="e.g. sarthak or you@example.com"
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
               className="w-full px-3 py-2 border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-md text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>

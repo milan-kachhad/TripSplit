@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+/* oxlint-disable react/purity */
+/* oxlint-disable react/set-state-in-effect */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../api/axios';
@@ -6,8 +11,15 @@ import AddMemberModal from '../components/AddMemberModal';
 import AddExpenseModal from '../components/AddExpenseModal';
 import ThemeToggle from '../components/ThemeToggle';
 
+<<<<<<< HEAD
 
  // Finds the matching member based on the raw payer information
+=======
+/**
+ * Intelligent Payer Resolution Helper
+ * Matches raw payer input or ID to actual trip members
+ */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 function findMatchingMember(rawPayer, membersList, user, rawMembers) {
   if (!rawPayer && (!membersList || membersList.length === 0)) {
     return user?.username || 'You';
@@ -25,8 +37,13 @@ function findMatchingMember(rawPayer, membersList, user, rawMembers) {
       (m) =>
         m &&
         (String(m.id) === payerStr ||
+<<<<<<< HEAD
         String(m.user_id) === payerStr ||
         String(m.member_record_id) === payerStr)
+=======
+         String(m.user_id) === payerStr ||
+         String(m.member_record_id) === payerStr)
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     );
     if (matchedById && (matchedById.name || matchedById.username)) {
       return matchedById.name || matchedById.username;
@@ -74,9 +91,15 @@ function findMatchingMember(rawPayer, membersList, user, rawMembers) {
   return (membersList && membersList[0]) || user?.username || 'You';
 }
 
+<<<<<<< HEAD
 
 // Calculates net balances accounting for expenses and completed settlements
 
+=======
+/**
+ * Calculates net balances accounting for expenses and completed settlements
+ */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 function calculateTripFinances(membersList, expensesList, completedSettlements, user, rawMembers) {
   if (!membersList || membersList.length === 0) {
     return {
@@ -437,6 +460,10 @@ export default function TripDetails() {
           </button>
         </div>
 
+<<<<<<< HEAD
+=======
+        {/* 3 Top Summary Cards */}
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           {/* Total Trip Cost */}
           <div className="p-6 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl shadow-xs transition-colors duration-200">
@@ -486,6 +513,10 @@ export default function TripDetails() {
           </div>
         </div>
 
+<<<<<<< HEAD
+=======
+        {/* Main Full-Size Workspace */}
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Column (7 cols): Expenses List */}
           <div className="lg:col-span-7 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl p-6 shadow-xs space-y-4 transition-colors duration-200">
@@ -542,8 +573,12 @@ export default function TripDetails() {
                               {Number(exp.original_amount !== undefined ? exp.original_amount : exp.amount).toLocaleString('en-IN')}{' '}
                               {exp.currency}{' '}
                               <span className="text-xs font-semibold text-gray-500 dark:text-slate-400">
+<<<<<<< HEAD
                                 (₹{Number(exp.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })} INR
                                 {exp.conversion_fee > 0 ? ` incl. ₹${Number(exp.conversion_fee).toFixed(2)} fee` : ''})
+=======
+                                (₹{Number(exp.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })} INR)
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
                               </span>
                             </span>
                           ) : (
@@ -670,7 +705,10 @@ export default function TripDetails() {
         isOpen={isMemberModalOpen}
         onClose={() => setIsMemberModalOpen(false)}
         tripId={id}
+<<<<<<< HEAD
         existingMembers={trip?.members || []}
+=======
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
         onMemberAdded={loadTripData}
       />
 

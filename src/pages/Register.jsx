@@ -4,8 +4,13 @@ import { useAuth } from '../context/AuthContext';
 import ThemeToggle from '../components/ThemeToggle';
 
 export default function Register() {
+<<<<<<< HEAD
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
+=======
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -14,6 +19,7 @@ export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
+<<<<<<< HEAD
   // Helper to extract clean valid username from email prefix before @
   const deriveUsernameFromEmail = (emailStr) => {
     if (!emailStr) return '';
@@ -28,10 +34,13 @@ export default function Register() {
     setUsername(autoUsername);
   };
 
+=======
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
+<<<<<<< HEAD
     const cleanEmail = email.trim().toLowerCase();
     const cleanUsername = (username || deriveUsernameFromEmail(cleanEmail)).trim();
 
@@ -48,12 +57,40 @@ export default function Register() {
 
     if (cleanUsername.length < 2 || cleanUsername.length > 50) {
       setError('Generated username must be between 2 and 50 characters long.');
+=======
+    const cleanUsername = username.trim();
+    const cleanEmail = email.trim();
+
+    if (!cleanUsername || !cleanEmail || !password) {
+      setError('Please fill in all required fields.');
+      return;
+    }
+
+    // Security check: username must not contain spaces
+    if (/\s/.test(cleanUsername)) {
+      setError('Username cannot contain spaces.');
+      return;
+    }
+
+    if (cleanUsername.length < 3 || cleanUsername.length > 30) {
+      setError('Username must be between 3 and 30 characters long.');
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       return;
     }
 
     const usernameRegex = /^[a-zA-Z0-9_.-]+$/;
     if (!usernameRegex.test(cleanUsername)) {
+<<<<<<< HEAD
       setError('Username can only contain letters, numbers, underscores, dashes, and periods.');
+=======
+      setError('Username can only contain letters, numbers, underscores, dashes, and periods (no spaces allowed).');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      setError('Please provide a valid email address.');
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       return;
     }
 
@@ -99,6 +136,26 @@ export default function Register() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+<<<<<<< HEAD
+=======
+              Username
+            </label>
+            <input
+              type="text"
+              required
+              autoCapitalize="none"
+              autoComplete="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value.replace(/\s+/g, ''))}
+              placeholder="e.g. sarthak123"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-md text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <p className="text-xs text-gray-400 dark:text-slate-500 mt-0.5">Letters, numbers, underscores, and dashes only (no spaces)</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
               Email Address
             </label>
             <input
@@ -106,19 +163,27 @@ export default function Register() {
               required
               autoComplete="email"
               value={email}
+<<<<<<< HEAD
               onChange={handleEmailChange}
               placeholder="e.g. sarthak@example.com"
+=======
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="name@example.com"
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
               className="w-full px-3 py-2 border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-md text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
+<<<<<<< HEAD
             
             <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">
             </p>
           </div>
 
           <div>
+=======
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1">
               Password
             </label>

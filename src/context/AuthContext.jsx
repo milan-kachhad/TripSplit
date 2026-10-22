@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+/* oxlint-disable react/only-export-components */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import api from '../api/axios';
 
@@ -72,6 +76,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+<<<<<<< HEAD
   // Register function (Username derived from Email + Password)
   const register = async (username, email, password) => {
     const trimmedEmail = (email || '').trim().toLowerCase();
@@ -79,6 +84,12 @@ export const AuthProvider = ({ children }) => {
       ? trimmedEmail.split('@')[0].replace(/[^a-zA-Z0-9_.-]/g, '')
       : '';
     const trimmedUsername = (username || autoUsername || '').trim();
+=======
+  // Register function (Username + Email + Password)
+  const register = async (username, email, password) => {
+    const trimmedUsername = (username || '').trim();
+    const trimmedEmail = (email || '').trim().toLowerCase();
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 
     try {
       const response = await api.post('/auth/register', {
