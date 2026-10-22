@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 /* oxlint-disable react/set-state-in-effect */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -57,8 +60,12 @@ export default function Dashboard() {
           <ThemeToggle />
 
           <div className="text-right hidden sm:block">
+<<<<<<< HEAD
+            <div className="text-sm font-bold text-gray-800 dark:text-slate-200">{username}</div>
+=======
             <div className="text-xs text-gray-400 dark:text-slate-400">Logged in as</div>
             <div className="text-sm font-bold text-gray-800 dark:text-slate-200">@{username}</div>
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
           </div>
           <button
             onClick={logout}
@@ -69,7 +76,11 @@ export default function Dashboard() {
         </div>
       </header>
 
+<<<<<<< HEAD
+    
+=======
       {/* Main Full-Size Workspace */}
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-8">
         {/* Welcome & Action Banner */}
         <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-xl p-6 sm:p-8 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-6 transition-colors duration-200">
@@ -181,7 +192,11 @@ export default function Dashboard() {
                       </div>
 
                       <p className="text-xs text-gray-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+<<<<<<< HEAD
+                        {trip.description}
+=======
                         {trip.description || 'Shared trip costs, split calculations, and settlement logs.'}
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
                       </p>
                     </div>
 

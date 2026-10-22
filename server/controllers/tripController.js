@@ -1,4 +1,9 @@
 import crypto from 'node:crypto';
+<<<<<<< HEAD
+import pool from '../config/db.js';
+
+ // POST /api/trips
+=======
 import bcrypt from 'bcryptjs';
 import pool from '../config/db.js';
 
@@ -7,6 +12,7 @@ import pool from '../config/db.js';
  * Body: { title, description }
  * Inserts trip with created_by = req.user.id. Automatically inserts creator into trip_members.
  */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export const createTrip = async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -57,6 +63,15 @@ export const createTrip = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+// Helper to compute trip members, expenses summary, and settlement status
+async function computeTripDetails(trip, allUsers = []) {
+  const [members] = await pool.query(
+    `SELECT tm.id AS member_id, tm.user_id, tm.name, u.email
+    FROM trip_members tm
+    LEFT JOIN users u ON tm.user_id = u.id
+    WHERE tm.trip_id = ?`,
+=======
 /**
  * Helper to compute trip members, expenses summary, and settlement status
  */
@@ -66,6 +81,7 @@ async function computeTripDetails(trip, allUsers = []) {
      FROM trip_members tm
      LEFT JOIN users u ON tm.user_id = u.id
      WHERE tm.trip_id = ?`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     [trip.id]
   );
 
@@ -148,20 +164,33 @@ async function computeTripDetails(trip, allUsers = []) {
   };
 }
 
+<<<<<<< HEAD
+ // GET /api/trips
+// Return all trips where authenticated user is in trip_members (INNER JOIN on trip_members)
+
+=======
 /**
  * GET /api/trips
  * Return all trips where authenticated user is in trip_members (INNER JOIN on trip_members)
  */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export const getTrips = async (req, res) => {
   try {
     const userId = req.user.id;
 
     const [rows] = await pool.query(
       `SELECT DISTINCT t.id, t.title, t.description, t.created_by, t.created_at
+<<<<<<< HEAD
+      FROM trips t
+      INNER JOIN trip_members tm ON t.id = tm.trip_id
+      WHERE tm.user_id = ? OR t.created_by = ?
+      ORDER BY t.created_at DESC`,
+=======
        FROM trips t
        INNER JOIN trip_members tm ON t.id = tm.trip_id
        WHERE tm.user_id = ? OR t.created_by = ?
        ORDER BY t.created_at DESC`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       [userId, userId]
     );
 
@@ -177,10 +206,15 @@ export const getTrips = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+ //GET /api/trips/:id
+ // Verify req.user.id is a member of this trip. Return trip details along with array of all members (id, name, email).
+=======
 /**
  * GET /api/trips/:id
  * Verify req.user.id is a member of this trip. Return trip details along with array of all members (id, name, email).
  */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export const getTripById = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -189,9 +223,15 @@ export const getTripById = async (req, res) => {
     // Verify req.user.id is a member of this trip or creator
     const [membership] = await pool.query(
       `SELECT tm.id FROM trip_members tm
+<<<<<<< HEAD
+      WHERE tm.trip_id = ? AND tm.user_id = ?
+      UNION
+      SELECT t.id FROM trips t WHERE t.id = ? AND t.created_by = ?`,
+=======
        WHERE tm.trip_id = ? AND tm.user_id = ?
        UNION
        SELECT t.id FROM trips t WHERE t.id = ? AND t.created_by = ?`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       [tripId, userId, tripId, userId]
     );
 
@@ -209,19 +249,32 @@ export const getTripById = async (req, res) => {
     // Get members
     const [members] = await pool.query(
       `SELECT tm.id AS member_record_id, COALESCE(tm.user_id, u.id, tm.id) AS id, tm.name, COALESCE(u.email, '') AS email
+<<<<<<< HEAD
+      FROM trip_members tm
+      LEFT JOIN users u ON tm.user_id = u.id
+      WHERE tm.trip_id = ?`,
+=======
        FROM trip_members tm
        LEFT JOIN users u ON tm.user_id = u.id
        WHERE tm.trip_id = ?`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       [tripId]
     );
 
     // Also fetch expenses and settlements for complete trip workspace
     const [expenses] = await pool.query(
       `SELECT e.*, COALESCE(u.name, u.username, tm.name, e.paid_by) AS paid_by_name
+<<<<<<< HEAD
+      FROM expenses e
+      LEFT JOIN users u ON e.paid_by = u.id OR e.paid_by = u.username
+      LEFT JOIN trip_members tm ON (e.paid_by = tm.user_id OR e.paid_by = tm.name OR e.paid_by = tm.id) AND tm.trip_id = e.trip_id
+      WHERE e.trip_id = ? ORDER BY e.created_at DESC`,
+=======
        FROM expenses e
        LEFT JOIN users u ON e.paid_by = u.id OR e.paid_by = u.username
        LEFT JOIN trip_members tm ON (e.paid_by = tm.user_id OR e.paid_by = tm.name OR e.paid_by = tm.id) AND tm.trip_id = e.trip_id
        WHERE e.trip_id = ? ORDER BY e.created_at DESC`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       [tripId]
     );
 
@@ -276,6 +329,55 @@ export const getTripById = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+
+// POST /api/trips/:id/members
+
+
+export const addTripMember = async (req, res) => {
+  try {
+    const tripId = req.params.id;
+    const { email, name, userId } = req.body;
+
+    let user = null;
+
+    // 1. If explicit userId provided, check user table
+    if (userId) {
+      const [userById] = await pool.query(
+        'SELECT id, name, username, email FROM users WHERE id = ?',
+        [userId]
+      );
+      if (userById.length > 0) {
+        user = userById[0];
+      }
+    }
+
+    const input = (email || name || '').trim();
+
+    // 2. Look up user by email or username if not already found by userId
+    if (!user && input) {
+      const [userRows] = await pool.query(
+        'SELECT id, name, username, email FROM users WHERE LOWER(email) = ? OR LOWER(username) = ? OR LOWER(name) = ?',
+        [input.toLowerCase(), input.toLowerCase(), input.toLowerCase()]
+      );
+      if (userRows.length > 0) {
+        user = userRows[0];
+      }
+    }
+
+    // 3. User MUST exist inside database 
+    if (!user) {
+      return res.status(404).json({
+        message: 'User does not exist in the database. Only registered users can be added as trip members.',
+      });
+    }
+
+    const memberUserId = user.id;
+    const memberName = user.username || user.name || input;
+    const memberEmail = user.email || '';
+
+    // 4. Check if already in trip_members for this trip
+=======
 /**
  * POST /api/trips/:id/members
  * Request body: { email }
@@ -339,13 +441,18 @@ export const addTripMember = async (req, res) => {
     const memberEmail = user.email || '';
 
     // 3. Check if already in trip_members for this trip
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     const [existingMembers] = await pool.query(
       'SELECT id FROM trip_members WHERE trip_id = ? AND (user_id = ? OR LOWER(name) = ?)',
       [tripId, memberUserId, memberName.toLowerCase()]
     );
 
     if (existingMembers.length > 0) {
+<<<<<<< HEAD
+      return res.status(400).json({ message: 'User is already a member of this trip.' });
+=======
       return res.status(400).json({ message: 'Already a member.' });
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     }
 
     const memberId = 'mem_' + Date.now() + '_' + crypto.randomBytes(3).toString('hex');
@@ -374,19 +481,32 @@ export const addTripMember = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+// GET /api/dashboard
+// Helper for dashboard metrics
+
+=======
 /**
  * GET /api/dashboard
  * Helper for dashboard metrics
  */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export const getDashboard = async (req, res) => {
   try {
     const userId = req.user.id;
     const [trips] = await pool.query(
       `SELECT DISTINCT t.id, t.title, t.description, t.created_by, t.created_at
+<<<<<<< HEAD
+      FROM trips t
+      LEFT JOIN trip_members tm ON t.id = tm.trip_id
+      WHERE tm.user_id = ? OR t.created_by = ? OR t.user_id = ?
+      ORDER BY t.created_at DESC`,
+=======
        FROM trips t
        LEFT JOIN trip_members tm ON t.id = tm.trip_id
        WHERE tm.user_id = ? OR t.created_by = ? OR t.user_id = ?
        ORDER BY t.created_at DESC`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       [userId, userId, userId]
     );
 
@@ -397,10 +517,17 @@ export const getDashboard = async (req, res) => {
 
     const [stats] = await pool.query(
       `SELECT COUNT(DISTINCT e.id) as expensesCount, COALESCE(SUM(e.amount), 0) as totalSpent
+<<<<<<< HEAD
+      FROM expenses e
+      INNER JOIN trips t ON e.trip_id = t.id
+      LEFT JOIN trip_members tm ON t.id = tm.trip_id
+      WHERE tm.user_id = ? OR t.created_by = ?`,
+=======
        FROM expenses e
        INNER JOIN trips t ON e.trip_id = t.id
        LEFT JOIN trip_members tm ON t.id = tm.trip_id
        WHERE tm.user_id = ? OR t.created_by = ?`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       [userId, userId]
     );
 

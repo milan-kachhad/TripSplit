@@ -9,8 +9,12 @@ export default function CreateTripModal({ isOpen, onClose, onTripCreated }) {
 
   if (!isOpen) return null;
 
+<<<<<<< HEAD
+  const handleSubmit = async (e) => {
+=======
   const handleSubmit = async (e) => 
     {
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     e.preventDefault();
     if (!title.trim()) return;
 

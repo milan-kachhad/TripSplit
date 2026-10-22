@@ -2,10 +2,14 @@ import crypto from 'node:crypto';
 import pool from '../config/db.js';
 import { convertCurrency } from '../utils/currency.js';
 
+<<<<<<< HEAD
+// POST /api/trips/:tripId/expenses
+=======
 /**
  * POST /api/trips/:tripId/expenses
  * Uses MySQL transactions for atomic writes with live currency conversion
  */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export const addExpense = async (req, res) => {
   const { tripId } = req.params;
   const {
@@ -30,8 +34,13 @@ export const addExpense = async (req, res) => {
   // Verify the logged-in user is a member of :tripId
   const [membership] = await pool.query(
     `SELECT tm.id FROM trip_members tm WHERE tm.trip_id = ? AND tm.user_id = ?
+<<<<<<< HEAD
+    UNION
+    SELECT t.id FROM trips t WHERE t.id = ? AND (t.created_by = ? OR t.user_id = ?)`,
+=======
      UNION
      SELECT t.id FROM trips t WHERE t.id = ? AND (t.created_by = ? OR t.user_id = ?)`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     [tripId, loggedInUserId, tripId, loggedInUserId, loggedInUserId]
   );
 
@@ -42,9 +51,15 @@ export const addExpense = async (req, res) => {
   // Fetch all members of the trip for resolving splits
   const [allMembers] = await pool.query(
     `SELECT tm.id AS member_id, tm.user_id, tm.name, u.email
+<<<<<<< HEAD
+    FROM trip_members tm
+    LEFT JOIN users u ON tm.user_id = u.id
+    WHERE tm.trip_id = ?`,
+=======
      FROM trip_members tm
      LEFT JOIN users u ON tm.user_id = u.id
      WHERE tm.trip_id = ?`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     [tripId]
   );
 
@@ -102,7 +117,15 @@ export const addExpense = async (req, res) => {
   const resolvedPayer = (payerMatch && payerMatch.user_id) ? payerMatch.user_id : payerInput;
 
   // Convert foreign currency to INR before opening transaction
+<<<<<<< HEAD
+  const {
+    convertedAmount: inrAmount,
+    conversionFee,
+    exchangeRate,
+  } = await convertCurrency(
+=======
   const { convertedAmount: inrAmount, exchangeRate } = await convertCurrency(
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
     rawAmount,
     expenseCurrency,
     'INR'
@@ -117,8 +140,13 @@ export const addExpense = async (req, res) => {
 
     // Step A: Insert record into expenses table
     await conn.query(
+<<<<<<< HEAD
+      `INSERT INTO expenses (id, trip_id, user_id, paid_by, amount, original_amount, currency, exchange_rate, conversion_fee, description, split_members)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+=======
       `INSERT INTO expenses (id, trip_id, user_id, paid_by, amount, original_amount, currency, exchange_rate, description, split_members)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       [
         expenseId,
         tripId,
@@ -128,6 +156,10 @@ export const addExpense = async (req, res) => {
         rawAmount,
         expenseCurrency,
         exchangeRate,
+<<<<<<< HEAD
+        conversionFee || 0,
+=======
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
         description.trim(),
         JSON.stringify(finalSplitMembers),
       ]
@@ -141,7 +173,11 @@ export const addExpense = async (req, res) => {
       const splitId = 'spl_' + Date.now() + '_' + crypto.randomBytes(3).toString('hex');
       await conn.query(
         `INSERT INTO expense_splits (id, expense_id, user_id, amount_owed)
+<<<<<<< HEAD
+        VALUES (?, ?, ?, ?)`,
+=======
          VALUES (?, ?, ?, ?)`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
         [splitId, expenseId, memberUserId, parseFloat(splitAmount)]
       );
     }
@@ -161,6 +197,10 @@ export const addExpense = async (req, res) => {
         original_amount: rawAmount,
         currency: expenseCurrency,
         exchange_rate: exchangeRate,
+<<<<<<< HEAD
+        conversion_fee: Number(conversionFee || 0),
+=======
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
         paid_by: resolvedPayer,
         paidBy: resolvedPayer,
         split_members: finalSplitMembers,
@@ -176,15 +216,32 @@ export const addExpense = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+
+ // GET /api/trips/:tripId/expenses
+ // Fetch all expenses for :tripId joined with users table to get payer name (paid_by_name)
+
+=======
 /**
  * GET /api/trips/:tripId/expenses
  * Fetch all expenses for :tripId joined with users table to get payer name (paid_by_name)
  */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export const getExpenses = async (req, res) => {
   try {
     const { tripId } = req.params;
 
     const [rows] = await pool.query(
+<<<<<<< HEAD
+      `SELECT e.id, e.id AS _id, e.trip_id, e.description, e.amount, e.original_amount, e.currency, e.exchange_rate, e.conversion_fee, e.paid_by, e.split_members, e.created_at,
+              COALESCE(u.name, u.username, tm.name, e.paid_by) AS paid_by_name,
+              COALESCE(u.name, u.username, tm.name, e.paid_by) AS paidBy
+      FROM expenses e
+      LEFT JOIN users u ON e.paid_by = u.id OR e.paid_by = u.username
+      LEFT JOIN trip_members tm ON (e.paid_by = tm.user_id OR e.paid_by = tm.name) AND tm.trip_id = e.trip_id
+      WHERE e.trip_id = ?
+      ORDER BY e.created_at DESC`,
+=======
       `SELECT e.id, e.id AS _id, e.trip_id, e.description, e.amount, e.original_amount, e.currency, e.exchange_rate, e.paid_by, e.split_members, e.created_at,
               COALESCE(u.name, u.username, tm.name, e.paid_by) AS paid_by_name,
               COALESCE(u.name, u.username, tm.name, e.paid_by) AS paidBy
@@ -193,6 +250,7 @@ export const getExpenses = async (req, res) => {
        LEFT JOIN trip_members tm ON (e.paid_by = tm.user_id OR e.paid_by = tm.name) AND tm.trip_id = e.trip_id
        WHERE e.trip_id = ?
        ORDER BY e.created_at DESC`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       [tripId]
     );
 
@@ -202,6 +260,10 @@ export const getExpenses = async (req, res) => {
       original_amount: r.original_amount !== null && r.original_amount !== undefined ? Number(r.original_amount) : Number(r.amount),
       currency: r.currency || 'INR',
       exchange_rate: Number(r.exchange_rate || 1.0),
+<<<<<<< HEAD
+      conversion_fee: Number(r.conversion_fee || 0),
+=======
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       split_members: typeof r.split_members === 'string' ? JSON.parse(r.split_members || '[]') : r.split_members,
     }));
 
@@ -212,9 +274,15 @@ export const getExpenses = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+
+ // DELETE /api/trips/:tripId/expenses/:expenseId
+
+=======
 /**
  * DELETE /api/trips/:tripId/expenses/:expenseId
  */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export const deleteExpense = async (req, res) => {
   try {
     const { tripId, expenseId } = req.params;
@@ -226,6 +294,11 @@ export const deleteExpense = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+
+ // GET /api/trips/:tripId/balances
+
+=======
 /**
  * GET /api/trips/:tripId/balances
  * The Balance & Settlement Engine:
@@ -235,6 +308,7 @@ export const deleteExpense = async (req, res) => {
  * Net balance calculation: net = (total_paid || 0) - (total_owed || 0)
  * Settlement Minimization Algorithm: two-pointer greedy algorithm
  */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export const getBalances = async (req, res) => {
   try {
     const tripId = req.params.tripId || req.params.id;
@@ -242,27 +316,45 @@ export const getBalances = async (req, res) => {
     // Query A: Total paid by each member on this trip
     const [paidRows] = await pool.query(
       `SELECT paid_by, SUM(amount) AS total_paid
+<<<<<<< HEAD
+      FROM expenses
+      WHERE trip_id = ?
+      GROUP BY paid_by`,
+=======
        FROM expenses
        WHERE trip_id = ?
        GROUP BY paid_by`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       [tripId]
     );
 
     // Query B: Total owed by each member on this trip
     const [owedRows] = await pool.query(
       `SELECT es.user_id, SUM(es.amount_owed) AS total_owed
+<<<<<<< HEAD
+      FROM expense_splits es
+      JOIN expenses e ON es.expense_id = e.id
+      WHERE e.trip_id = ?
+      GROUP BY es.user_id`,
+=======
        FROM expense_splits es
        JOIN expenses e ON es.expense_id = e.id
        WHERE e.trip_id = ?
        GROUP BY es.user_id`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       [tripId]
     );
 
     // Query C: All trip members with their id and name
     const [members] = await pool.query(
       `SELECT tm.id AS member_id, COALESCE(tm.user_id, tm.id) AS id, tm.user_id, tm.name
+<<<<<<< HEAD
+      FROM trip_members tm
+      WHERE tm.trip_id = ?`,
+=======
        FROM trip_members tm
        WHERE tm.trip_id = ?`,
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
       [tripId]
     );
 
@@ -361,10 +453,16 @@ export const getBalances = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+ // POST /api/trips/:tripId/settle
+// Settle balances recording
+
+=======
 /**
  * POST /api/trips/:tripId/settle
  * Settle balances recording
  */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export const recordSettlement = async (req, res) => {
   try {
     const tripId = req.params.tripId || req.params.id;
@@ -390,10 +488,17 @@ export const recordSettlement = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
+
+ // DELETE /api/trips/:tripId/settle
+ // Reset settlements
+
+=======
 /**
  * DELETE /api/trips/:tripId/settle
  * Reset settlements
  */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 export const resetSettlements = async (req, res) => {
   try {
     const tripId = req.params.tripId || req.params.id;

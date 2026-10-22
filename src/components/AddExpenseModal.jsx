@@ -1,5 +1,8 @@
+<<<<<<< HEAD
+=======
 /* oxlint-disable react/purity */
 /* oxlint-disable react/set-state-in-effect */
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 import React, { useState, useEffect, useMemo } from 'react';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
@@ -168,9 +171,19 @@ export default function AddExpenseModal({
             </div>
 
             {currency !== 'INR' && (
+<<<<<<< HEAD
+              <div className="mt-1.5 p-2 rounded-md bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-xs space-y-0.5">
+                <div className="flex items-center justify-between text-amber-800 dark:text-amber-300 font-semibold">
+                  <span>Converted to INR (with 2% Forex Charge)</span>
+                  <span className="px-1.5 py-0.5 rounded bg-amber-200/80 dark:bg-amber-900/60 text-[10px] text-amber-900 dark:text-amber-200">+2% Fee</span>
+                </div>
+                
+              </div>
+=======
               <p className="text-xs text-amber-600 dark:text-amber-400 font-medium mt-1">
                 ⚡ Will be converted to INR using live exchange rates
               </p>
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
             )}
 
             {numAmount > 0 && (

@@ -4,6 +4,10 @@ import dotenv from 'dotenv';
 import { ping, initDatabase } from './config/db.js';
 import authRoutes from './routes/auth.js';
 import tripRoutes from './routes/trips.js';
+<<<<<<< HEAD
+import userRoutes from './routes/users.js';
+=======
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 import authMiddleware from './middleware/auth.js';
 import { getDashboard } from './controllers/tripController.js';
 
@@ -30,6 +34,10 @@ app.get('/api/health', (req, res) => {
 // Mount Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/trips', tripRoutes);
+<<<<<<< HEAD
+app.use('/api/users', userRoutes);
+=======
+>>>>>>> 2e5742c0c09ec5b5dbd1205951e97938012931bc
 app.get('/api/dashboard', authMiddleware, getDashboard);
 
 // 404 Route Not Found Handler
